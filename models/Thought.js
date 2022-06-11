@@ -1,8 +1,9 @@
 const { Schema, model, Types } = require('mongoose');
-const moment = require('moment');
+// const dateFormat look at recording for reference
 
 const ReactionSchema = new Schema(
     {
+      // set custom id to avoid confusion with parent comment _id
       reactionId: {
         type: Schema.Types.ObjectId,
         default: () => new Types.ObjectId()
@@ -63,7 +64,7 @@ const ThoughtSchema = new Schema (
 
 const Thought = model('Thought', ThoughtSchema);
 
-  // total count of friends on retrieval
+  // get total count of friends on retrieval
   ThoughtSchema.virtual('reactionCount').get(function() {
     return this.reactions.length;
   });
