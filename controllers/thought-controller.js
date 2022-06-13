@@ -8,7 +8,6 @@ const thoughtController = {
         select: "-__v",
       })
       .select("-__v")
-      .sort({ _id: -1 })
       .then(userData => res.json(userData))
       .catch((err) => {
         console.log(err);
@@ -29,24 +28,12 @@ const thoughtController = {
         res.status(500).json(err);
       });
   },
-  createThought({ body }, res) {
-    Thought.create(body)
-      .then(({ _id }) => {
-        return User.findOneAndUpdate(
-          { _id: body.userId },
-          { $push: { thoughts: _id }},
-          { new: true }
-        );
-      })
-      .then(userData => {
-        if (!userData) {
-          res.status(404).json({ message: 'No user found with this id!' });
-          return;
-        }
-        res.json(userData);
-      })
-      .catch(err => res.json(err));
-  },
+ // Create thought
+ createThought({ body }, res) {
+  Thought.create(body)
+    .then(dbThoughtData => res.json(dbThoughtData))
+    .catch(err => res.json(err));
+},
   addReaction({ params, body }, res) {
     Thought.findOneAndUpdate(
       { _id: params.thoughtId },
@@ -96,4 +83,4 @@ const thoughtController = {
   },
 };
 
-module.exports = thoughtController
+module.exports = thoughtController;
